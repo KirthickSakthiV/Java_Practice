@@ -1,0 +1,100 @@
+
+#include <iostream>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+class Product {
+public:
+    string name;
+    int quantity;
+    double price;
+
+    Product(string n, int q, double p) : name(n), quantity(q), price(p) {}
+};
+
+class Inventory {
+private:
+    vector<Product> products;
+
+public:
+    void addProduct(const Product& product) {
+        products.push_back(product);
+    }
+
+    void displayInventory() {
+        cout << setw(15) << "Product Name" << setw(15) << "Quantity" << setw(10) << "Price" << endl;
+        cout << setfill('-') << setw(40) << "" << setfill(' ') << endl;
+
+        for (const auto& product : products) {
+            cout << setw(15) << product.name << setw(15) << product.quantity << setw(10) << product.price << endl;
+        }
+    }
+
+    Product* findProduct(const string& productName) {
+        for (auto& product : products) {
+            if (product.name == productName) {
+                return &product;
+            }
+        }
+        return nullptr;
+    }
+
+    void updateQuantity(const string& productName, int newQuantity) {
+        Product* product = findProduct(productName);
+        if (product != nullptr) {
+            product->quantity = newQuantity;
+            cout << "Quantity updated successfully." << endl;
+        } else {
+            cout << "Product not found." << endl;
+        }
+    }
+};
+
+int main() {
+    Inventory inventory;
+
+    
+    Product product1("Laptop", 10, 1200.0);
+    Product product2("Printer", 5, 300.0);
+
+    
+    inventory.addProduct(product1);
+    inventory.addProduct(product2);
+
+    int choice;
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Display Inventory\n";
+        cout << "2. Update Quantity\n";
+        cout << "3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                inventory.displayInventory();
+                break;
+            case 2:
+                {
+                    string productName;
+                    int newQuantity;
+                    cout << "Enter product name: ";
+                    cin >> productName;
+                    cout << "Enter new quantity: ";
+                    cin >> newQuantity;
+                    inventory.updateQuantity(productName, newQuantity);
+                }
+                break;
+            case 3:
+                cout << "Exiting program.\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 3);
+
+    return 0;
+}
+
